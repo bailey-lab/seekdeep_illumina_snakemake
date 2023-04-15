@@ -22,5 +22,5 @@ conda activate snakemake
 ```
  - Run snakemake with:
 ```bash
-snakemake -s seekdeep_nanopore_general.smk --cores [your_desired_core_count]
+snakemake -s seekdeep_illumina_general.smk --cores [your_desired_core_count]
 ```
