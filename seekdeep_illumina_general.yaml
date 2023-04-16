@@ -33,9 +33,9 @@ extra_qluster_cmds: '"--illuminaAllowHomopolyers"'
 #less than 1% of the data, and which genome, gene annotation, and amino acid
 #site list to use for annotating amino acids
 extra_process_cluster_cmds: '"--lowFreqHaplotypeFracCutOff 0.01
-  --gffFnp /genome_info/{params.gff_subfolder}/Pf3D7.gff
-  --genomeFnp /genome_info/{params.genome_subfolder}/Pf3D7.fasta
-  --knownAminoAcidChangesFnp /genome_info/{params.amino_acid_fnp}"'
+  --gffFnp /genome_info/info/gff/Pf3D7.gff
+  --genomeFnp /genome_info/genomes/Pf3D7.fasta
+  --knownAminoAcidChangesFnp /genome_info/info/pf_drug_resistant_aaPositions_k13_updated.tsv"'
 extra_extractor_cmds: '"--checkShortenBars
   --checkRevComplementForPrimers"'
 
