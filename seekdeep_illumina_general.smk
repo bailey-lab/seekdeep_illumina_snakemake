@@ -1,11 +1,9 @@
 configfile: 'seekdeep_illumina_general.yaml'
-
 rule all:
 	input:
-#		primer_info=config['output_folder']+'/extractedRefSeqs/locationsByGenome/Pf3D7_infos.tab.txt'
-#		done=config['output_folder']+'/finished_setup.txt'
-		analysis_done=config['output_folder']+'/finished_analysis.txt'	
-#		analysis_done=config['output_folder']+'/analysis/popClustering'
+		analysis_done=config['output_folder']+'/finished_analysis.txt',
+		out_snakefile=config['output_folder']+'seekdeep_nanopore_general.smk',
+		out_config_file=config['output_folder']+'seekdeep_nanopore_general.yaml'
 
 rule copy_files:
 	'''
@@ -62,27 +60,30 @@ rule setupTarAmpAnalysis:
 		genome_subfolder=config['genome_subfolder'],
 		sample_names=config['sample_names'],
 		amino_acid_fnp=config['amino_acid_fnp'],
-		for_seekdeep='/seekdeep_output/extractedFrefSeqs/forSeekDeep',
-		softlink_fastq_binding=config['softlink_fastq_binding']
+		for_seekdeep='/seekdeep_output/extractedRefSeqs/forSeekDeep',
+		softlink_fastq_binding=config['softlink_fastq_binding'],
+		extra_extractor_cmds=config['extra_extractor_cmds'],
+		extra_qluster_cmds=config['extra_qluster_cmds'],
+		extra_process_cluster_cmds=config['extra_process_cluster_cmds']
 	threads: config['cpus_to_use']
 	output:
 		setup_done=config['output_folder']+'/finished_setup.txt'
 	shell:
 		'''
 		singularity exec -B {input.data_folder}:/input_data \
-		-B {params.output_dir}:/seekdeep_output {input.sif_file} \
 		-B {input.genome_root_folder}:/genome_info \
-		{params.softlink_fastq_binding} \
-		SeekDeep setupTarAmpAnalysis --samples /input_data/{input.sample_names} \
+		-B {params.output_dir}:/seekdeep_output \
+		{params.softlink_fastq_binding} {input.sif_file} \
+		SeekDeep setupTarAmpAnalysis --samples /input_data/{params.sample_names} \
 		--outDir /seekdeep_output/analysis \
 		--inputDir /input_data/{params.fastq_folder} \
 		--idFile /input_data/{params.primer_file} --lenCutOffs \
 		{params.for_seekdeep}/lenCutOffs.txt \
-		--overlapStatusFnp {params.for_seekdeep}/refSeqs/overlapStatuses.txt \
+		--overlapStatusFnp {params.for_seekdeep}/overlapStatuses.txt \
 		--refSeqsDir {params.for_seekdeep}/refSeqs/ \
-		--extraExtractorCmds={config['extra_extractor_cmds']} \
-		--extraQlusterCmds={config['extra_qluster_cmds']} \
-		--extraProcessClusterCmds={config['extra_process_cluster_cmds']} \
+		--extraExtractorCmds={params.extra_extractor_cmds} \
+		--extraQlusterCmds={params.extra_qluster_cmds} \
+		--extraProcessClusterCmds={params.extra_process_cluster_cmds} \
 		--numThreads {threads}
 		touch {output.setup_done}
 		'''
@@ -94,6 +95,7 @@ rule runAnalysis:
 		setup_done=config['output_folder']+'/finished_setup.txt'
 	params:
 		output_dir=config['output_folder'],
+		softlink_fastq_binding=config['softlink_fastq_binding']
 	output:
 #		analysis_done=directory(config['output_folder']+'/analysis/popClustering')
 		analysis_done=config['output_folder']+'/finished_analysis.txt'
@@ -102,6 +104,7 @@ rule runAnalysis:
 		'''
 		singularity exec -B {input.data_folder}:/input_data \
 		-B {params.output_dir}:/seekdeep_output \
+		{params.softlink_fastq_binding} \
 		-H {params.output_dir}/analysis/:/home/analysis \
 		{input.sif_file} ./runAnalysis.sh {threads}
 		touch {output.analysis_done}

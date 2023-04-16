@@ -11,7 +11,7 @@ cpus_to_use: 14 #higher CPU count speeds up runtime, uses more memory
 #original fastq files should be written twice with a : in between (otherwise
 #leave this variable as empty quotes)
 primer_plus_fastq_binding: /work/asimkin/seekdeep/DR_amplicon_panel/run_seekdeep/output_files
-fastq_subfolder: new_fastq_links #name of the demultiplexed fastq folder
+fastq_subfolder: new_fastq_links2 #name of the demultiplexed fastq folder
 primer_file: primers.txt #name of the primer file
 sample_names: sampleNames.tab.txt
 softlink_fastq_binding: '-B /work/bailey_share/raw_data/from_others/221109_UNC22_0993_000000000-KMJ6M/fastq:/work/bailey_share/raw_data/from_others/221109_UNC22_0993_000000000-KMJ6M/fastq'
@@ -31,10 +31,10 @@ extra_qluster_cmds: '"--illuminaAllowHomopolyers"'
 #below example tells seekdeep to remove haplotypes with a readcount making up
 #less than 1% of the data, and which genome, gene annotation, and amino acid
 #site list to use for annotating amino acids
-extra_process_cluster_cmds: "--lowFreqHaplotypeFracCutOff 0.01
+extra_process_cluster_cmds: '"--lowFreqHaplotypeFracCutOff 0.01
   --gffFnp /genome_info/{params.gff_subfolder}/Pf3D7.gff
   --genomeFnp /genome_info/{params.genome_subfolder}/Pf3D7.fasta
-  --knownAminoAcidChangesFnp /genome_info/{params.amino_acid_fnp}"
-extra_extractor_cmds: "--checkShortenBars
-  --checkRevComplementForPrimers"
+  --knownAminoAcidChangesFnp /genome_info/{params.amino_acid_fnp}"'
+extra_extractor_cmds: '"--checkShortenBars
+  --checkRevComplementForPrimers"'
 
