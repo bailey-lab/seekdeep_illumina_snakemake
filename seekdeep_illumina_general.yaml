@@ -1,25 +1,24 @@
 #information about your system
 sif_file_location: /work/bailey_share/bin/elucidator230407.sif #location of downloaded sif file
 output_folder: seekdeep_output_files2 #this is where output will go
+insert_size: 250 #length (in nt) of each illumina read. Needs to be accurate.
 cpus_to_use: 16 #higher CPU count speeds up runtime, uses more memory
 #don't exceed your system's available CPU count or available memory.
 
-#this folder should have 2 things: a folder of demultiplexed fastq files and a
-#tab delimited file of primers
+#this folder should have 2 things: a subfolder of demultiplexed fastq files and
+#a tab delimited file of primers
 primer_plus_fastq_binding: /work/bailey_share/processed_data/nwernsma/221227_4CASTtransMIT
 fastq_subfolder: compiledfastq #name of the demultiplexed fastq folder
 primer_file: inner_ids.tab.txt #name of the primer file
 
 #the genome_binding folder should have 2 things: a subfolder of bowtie2 indexed
 #genomes, and a subfolder of gff gene annotations for each genome. Optionally, a
-#third item can be added, which is a file of amino acid positions to annotate.
+#third item can be added to this folder, which is a file of amino acid positions
+#to annotate.
 genome_binding: /work/asimkin/seekdeep/jess_4cast/testing_snakemake_nanopore_general/selected_pf3k_genomes
 genome_subfolder: genomes #subfolder with bowtie2 indexed genomes
 gff_subfolder: info/gff #subfolder of gff files
 amino_acid_fnp: info/pf_drug_resistant_aaPositions_k13_updated.tsv #positions to annotate
-
-insert_size: 250 #length (in nt) of each illumina read. Needs to be accurate.
-
 
 #these are seekdeep sensitivity and specificity settings that you can tweak if
 #seekdeep is failing to extract reads or generating inaccurate haplotypes
@@ -31,3 +30,6 @@ extra_process_cluster_cmds: "--lowFreqHaplotypeFracCutOff 0.01
   --gffFnp /genome_info/{params.gff_subfolder}/Pf3D7.gff
   --genomeFnp /genome_info/{params.genome_subfolder}/Pf3D7.fasta
   --knownAminoAcidChangesFnp /genome_info/{params.amino_acid_fnp}"
+extra_extractor_cmds: "--checkShortenBars
+  --checkRevComplementForPrimers"
+

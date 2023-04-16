@@ -1,5 +1,5 @@
 # seekdeep_illumina_snakemake
-a basic workflow for running seekdeep on nanopore
+a basic workflow for running Nick Hathaway's seekdeep on nanopore
 
 ## Installation:
 Install conda with:
@@ -24,3 +24,21 @@ conda activate snakemake
 ```bash
 snakemake -s seekdeep_illumina_general.smk --cores [your_desired_core_count]
 ```
+
+## Help:
+You can read Nick Hathaway's manual here:
+https://seekdeep.brown.edu/
+
+If you're in the folder where you downloaded the elucidator.sif file, you can
+get help on any seekdeep command with:
+```bash
+singularity exec elucidator.sif SeekDeep [cmd] -h
+```
+
+Here are some examples:
+  - singularity exec elucidator.sif SeekDeep -h
+  - singularity exec elucidator.sif SeekDeep genTargetInfoFromGenomes -h
+  - singularity exec elucidator.sif SeekDeep setupTarAmpAnalysis -h
+  - singularity exec elucidator.sif SeekDeep extractor -h
+  - singularity exec elucidator.sif SeekDeep qluster -h
+  - singularity exec elucidator.sif SeekDeep processClusters -h

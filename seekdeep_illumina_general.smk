@@ -60,8 +60,9 @@ rule setupTarAmpAnalysis:
 		primer_file=config['primer_file'],
 		fastq_folder=config['fastq_subfolder'],
 		genome_subfolder=config['genome_subfolder'],
-		sample_names=config['sample_names']
-		amino_acid_fnp=config['amino_acid_fnp']
+		sample_names=config['sample_names'],
+		amino_acid_fnp=config['amino_acid_fnp'],
+		for_seekdeep='/seekdeep_output/extractedFrefSeqs/forSeekDeep'
 	threads: config['cpus_to_use']
 	output:
 		setup_done=config['output_folder']+'/finished_setup.txt'
@@ -74,13 +75,12 @@ rule setupTarAmpAnalysis:
 		--outDir /seekdeep_output/analysis \
 		--inputDir /input_data/{params.fastq_folder} \
 		--idFile /input_data/{params.primer_file} --lenCutOffs \
-		/seekdeep_output/extractedRefSeqs/forSeekDeep/lenCutOffs.txt \
-		--overlapStatusFnp /seekdeep_output/extractedRefSeqs/forSeekDeep/refSeqs/overlapStatuses.txt \
-		--refSeqsDir /seekdeep_output/extracted_refseqs/forSeekDeep/refSeqs/ \
-		--extraExtractorCmds="--checkShortenBars \
-		--checkRevComplementForPrimers" \
-		--extraQlusterCmds= {config['extra_qluster_cmds']} \
-		--extraProcessClusterCmds= {config['extra_process_cluster_cmds']} \
+		{params.for_seekdeep}/lenCutOffs.txt \
+		--overlapStatusFnp {params.for_seekdeep}/refSeqs/overlapStatuses.txt \
+		--refSeqsDir {params.for_seekdeep}/refSeqs/ \
+		--extraExtractorCmds={config['extra_extractor_cmds']} \
+		--extraQlusterCmds={config['extra_qluster_cmds']} \
+		--extraProcessClusterCmds={config['extra_process_cluster_cmds']} \
 		--numThreads {threads}
 		touch {output.setup_done}
 		'''
