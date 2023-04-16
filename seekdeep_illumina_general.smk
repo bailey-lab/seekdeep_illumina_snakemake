@@ -2,8 +2,8 @@ configfile: 'seekdeep_illumina_general.yaml'
 rule all:
 	input:
 		analysis_done=config['output_folder']+'/finished_analysis.txt',
-		out_snakefile=config['output_folder']+'seekdeep_nanopore_general.smk',
-		out_config_file=config['output_folder']+'seekdeep_nanopore_general.yaml'
+		out_snakefile=config['output_folder']+'/seekdeep_nanopore_general.smk',
+		out_config_file=config['output_folder']+'/seekdeep_nanopore_general.yaml'
 
 rule copy_files:
 	'''
@@ -13,8 +13,8 @@ rule copy_files:
 		in_snakefile='seekdeep_illumina_general.smk',
 		in_config_file='seekdeep_illumina_general.yaml'
 	output:
-		out_snakefile=config['output_folder']+'seekdeep_nanopore_general.smk',
-		out_config_file=config['output_folder']+'seekdeep_nanopore_general.yaml'
+		out_snakefile=config['output_folder']+'/seekdeep_nanopore_general.smk',
+		out_config_file=config['output_folder']+'/seekdeep_nanopore_general.yaml'
 	shell:
 		'''
 		cp {input.in_snakefile} {output.out_snakefile}
