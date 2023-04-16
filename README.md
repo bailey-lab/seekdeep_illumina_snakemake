@@ -2,27 +2,26 @@
 a basic workflow for running Nick Hathaway's seekdeep on nanopore
 
 ## Installation:
-Install conda with:
+###Install conda:
 https://github.com/conda-forge/miniforge#mambaforge
 
-Install snakemake in an environment called snakemake with:
+### Create a conda environment and install snakemake and singularity there:
 ```bash
 conda create -c conda-forge -c bioconda -n snakemake snakemake
-```
-
-Install singularity in this environment with:
-```bash
 conda activate snakemake
 conda install -c conda-forge singularity
 ```
 
-## Usage:
+### Setup your environment:
  - Change directory to a folder where you want to run the analysis
  - Download the seekdeep_nanopore_general.smk file into this folder
  - Download the sif file from here into the same folder: https://seekdeep.brown.edu/programs/elucidator.sif
  - Download the seekdeep_nanopore_general.yaml file into the same folder
+
+
+## Usage:
  - Edit the config.yaml file using the instructions in the comments. Use a text editor that outputs unix line endings (e.g. vscode, notepad++, gedit, micro, emacs, vim, vi, etc.)
- - Activate snakemake with:
+ - If snakemake is not your active conda environment, activate snakemake with:
 ```bash
 conda activate snakemake
 ```
