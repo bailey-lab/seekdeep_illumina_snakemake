@@ -1,4 +1,4 @@
-configfile: 'seekdeep_nanopore_general.yaml'
+configfile: 'seekdeep_illumina_general.yaml'
 
 rule all:
 	input:
@@ -12,7 +12,7 @@ rule copy_files:
 	copies snakemake script and config files to output folder for reproducibility.
 	'''
 	input:
-		in_snakefile='seekdeep_illumina_general.smk'
+		in_snakefile='seekdeep_illumina_general.smk',
 		in_config_file='seekdeep_illumina_general.yaml'
 	output:
 		out_snakefile=config['output_folder']+'seekdeep_nanopore_general.smk',
@@ -62,7 +62,8 @@ rule setupTarAmpAnalysis:
 		genome_subfolder=config['genome_subfolder'],
 		sample_names=config['sample_names'],
 		amino_acid_fnp=config['amino_acid_fnp'],
-		for_seekdeep='/seekdeep_output/extractedFrefSeqs/forSeekDeep'
+		for_seekdeep='/seekdeep_output/extractedFrefSeqs/forSeekDeep',
+		softlink_fastq_binding=config['softlink_fastq_binding']
 	threads: config['cpus_to_use']
 	output:
 		setup_done=config['output_folder']+'/finished_setup.txt'
@@ -71,6 +72,7 @@ rule setupTarAmpAnalysis:
 		singularity exec -B {input.data_folder}:/input_data \
 		-B {params.output_dir}:/seekdeep_output {input.sif_file} \
 		-B {input.genome_root_folder}:/genome_info \
+		{params.softlink_fastq_binding} \
 		SeekDeep setupTarAmpAnalysis --samples /input_data/{input.sample_names} \
 		--outDir /seekdeep_output/analysis \
 		--inputDir /input_data/{params.fastq_folder} \
