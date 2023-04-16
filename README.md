@@ -1,4 +1,4 @@
-# seekdeep_nanopore
+# seekdeep_illumina_snakemake
 a basic workflow for running seekdeep on nanopore
 
 ## Installation:
