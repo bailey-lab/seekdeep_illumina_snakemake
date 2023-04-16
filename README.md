@@ -2,7 +2,7 @@
 a basic workflow for running Nick Hathaway's seekdeep on nanopore
 
 ## Installation:
-###Install conda:
+### Install conda:
 https://github.com/conda-forge/miniforge#mambaforge
 
 ### Create a conda environment and install snakemake and singularity there:
