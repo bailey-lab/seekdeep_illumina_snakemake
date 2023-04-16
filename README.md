@@ -35,19 +35,20 @@ you can get help on any seekdeep command with:
 singularity exec elucidator.sif SeekDeep [cmd] -h
 ```
 
-There are 3 main commands in this pipeline.
+### three main commands in the snakefile.
   - The first command gets info about the genome (genTargetInfoFromGenomes).
   - The second command sets up an analysis run (setupTarAmpAnalysis).
   - The third command runs 3 seekdeep programs (runAnalysis.sh, no help files).
 
-Here are some example help commands to learn more about these programs:
+Here are some example help commands to learn more about these commands:
   - singularity exec elucidator.sif SeekDeep -h
   - singularity exec elucidator.sif SeekDeep genTargetInfoFromGenomes -h
   - singularity exec elucidator.sif SeekDeep setupTarAmpAnalysis -h
 
 
-Seekdeep itself has 3 sub-steps. Each of these steps can be tweaked for
-sensitivity and specificity (via extra[step]Cmds):
+### three sub-steps of running seekdeep.
+Each of these steps can be tweaked for sensitivity and specificity (via extra
+[step]Cmds in the yaml file):
   - The first command extracts amplicon reads (extractor)
   - The second command clusters together similar reads (qluster)
   - The third command processes clusters into haplotypes (processClusters)
