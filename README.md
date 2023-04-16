@@ -15,8 +15,8 @@ conda install -c conda-forge singularity
 ### Setup your environment:
  - Change directory to a folder where you want to run the analysis
  - Download the seekdeep_nanopore_general.smk file into this folder
- - Download the sif file from here into the same folder: https://seekdeep.brown.edu/programs/elucidator.sif
  - Download the seekdeep_nanopore_general.yaml file into the same folder
+ - Download the sif file from here into the same folder: https://seekdeep.brown.edu/programs/elucidator.sif
 
 
 ## Usage:
