@@ -47,8 +47,8 @@ Here are some example help commands to learn more about these commands:
 
 
 ### three sub-steps of running seekdeep.
-Each of these steps can be tweaked for sensitivity and specificity (via extra
-[step]Cmds in the yaml file):
+Each of these steps can be tweaked for sensitivity and specificity (via extra_
+[step]_cmds at the bottom of the yaml file):
   - The first command extracts amplicon reads (extractor)
   - The second command clusters together similar reads (qluster)
   - The third command processes clusters into haplotypes (processClusters)
