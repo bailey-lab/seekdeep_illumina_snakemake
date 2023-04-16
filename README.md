@@ -10,6 +10,12 @@ Install snakemake in an environment called snakemake with:
 conda create -c conda-forge -c bioconda -n snakemake snakemake
 ```
 
+Install singularity in this environment with:
+```bash
+conda activate snakemake
+conda install -c conda-forge singularity
+```
+
 ## Usage:
  - Change directory to a folder where you want to run the analysis
  - Download the seekdeep_nanopore_general.smk file into this folder
