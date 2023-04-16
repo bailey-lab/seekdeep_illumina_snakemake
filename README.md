@@ -29,16 +29,30 @@ snakemake -s seekdeep_illumina_general.smk --cores [your_desired_core_count]
 You can read Nick Hathaway's manual here:
 https://seekdeep.brown.edu/
 
-If you're in the folder where you downloaded the elucidator.sif file, you can
-get help on any seekdeep command with:
+If you're in the folder where you downloaded the elucidator.sif file,
+you can get help on any seekdeep command with:
 ```bash
 singularity exec elucidator.sif SeekDeep [cmd] -h
 ```
 
-Here are some examples:
+There are 3 main commands in this pipeline.
+  - The first command gets info about the genome (genTargetInfoFromGenomes).
+  - The second command sets up an analysis run (setupTarAmpAnalysis).
+  - The third command runs 3 seekdeep programs (runAnalysis.sh, no help files).
+
+Here are some example help commands to learn more about these programs:
   - singularity exec elucidator.sif SeekDeep -h
   - singularity exec elucidator.sif SeekDeep genTargetInfoFromGenomes -h
   - singularity exec elucidator.sif SeekDeep setupTarAmpAnalysis -h
+
+
+Seekdeep itself has 3 sub-steps. Each of these steps can be tweaked for
+sensitivity and specificity (via extra[step]Cmds):
+  - The first command extracts amplicon reads (extractor)
+  - The second command clusters together similar reads (qluster)
+  - The third command processes clusters into haplotypes (processClusters)
+
+Here are some example help commands to learn more about these programs:
   - singularity exec elucidator.sif SeekDeep extractor -h
   - singularity exec elucidator.sif SeekDeep qluster -h
   - singularity exec elucidator.sif SeekDeep processClusters -h
