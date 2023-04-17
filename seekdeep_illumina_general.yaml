@@ -1,6 +1,6 @@
 #information about your system
 sif_file_location: /work/bailey_share/bin/elucidator230407.sif #location of downloaded sif file
-output_folder: amplicon_panel_test_run_kevin_version_mod2 #this is where output will go
+output_folder: /work/asimkin/seekdeep/DR_amplicon_panel/seekdeep_illumina_snakemake/trying_again #this is where output will go
 insert_size: 150 #length (in nt) of each illumina read. Needs to be accurate.
 cpus_to_use: 14 #higher CPU count speeds up runtime, uses more memory
 #don't exceed your system's available CPU count or available memory.

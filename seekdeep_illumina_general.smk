@@ -2,8 +2,8 @@ configfile: 'seekdeep_illumina_general.yaml'
 rule all:
 	input:
 		analysis_done=config['output_folder']+'/finished_analysis.txt',
-		out_snakefile=config['output_folder']+'/seekdeep_nanopore_general.smk',
-		out_config_file=config['output_folder']+'/seekdeep_nanopore_general.yaml'
+		out_snakefile=config['output_folder']+'/seekdeep_illumina_general.smk',
+		out_config_file=config['output_folder']+'/seekdeep_illumina_general.yaml'
 
 rule copy_files:
 	'''
@@ -13,8 +13,8 @@ rule copy_files:
 		in_snakefile='seekdeep_illumina_general.smk',
 		in_config_file='seekdeep_illumina_general.yaml'
 	output:
-		out_snakefile=config['output_folder']+'/seekdeep_nanopore_general.smk',
-		out_config_file=config['output_folder']+'/seekdeep_nanopore_general.yaml'
+		out_snakefile=config['output_folder']+'/seekdeep_illumina_general.smk',
+		out_config_file=config['output_folder']+'/seekdeep_illumina_general.yaml'
 	shell:
 		'''
 		cp {input.in_snakefile} {output.out_snakefile}
@@ -83,7 +83,10 @@ rule setupTarAmpAnalysis:
 		--refSeqsDir {params.for_seekdeep}/refSeqs/ \
 		--extraExtractorCmds={params.extra_extractor_cmds} \
 		--extraQlusterCmds={params.extra_qluster_cmds} \
-		--extraProcessClusterCmds={params.extra_process_cluster_cmds} \
+		--extraProcessClusterCmds=" --lowFreqHaplotypeFracCutOff 0.01 \
+		--gffFnp /genome_info/info/gff/Pf3D7.gff \
+		--genomeFnp /genome_info/genomes/Pf3D7.fasta \
+		--knownAminoAcidChangesFnp /genome_info/info/pf_drug_resistant_aaPositions_k13_updated.tsv" \
 		--numThreads {threads}
 		touch {output.setup_done}
 		'''
@@ -92,7 +95,8 @@ rule runAnalysis:
 	input:
 		data_folder=config['primer_plus_fastq_binding'],
 		sif_file=config['sif_file_location'],
-		setup_done=config['output_folder']+'/finished_setup.txt'
+		setup_done=config['output_folder']+'/finished_setup.txt',
+		genome_root_folder=config['genome_binding']
 	params:
 		output_dir=config['output_folder'],
 		softlink_fastq_binding=config['softlink_fastq_binding']
@@ -104,6 +108,7 @@ rule runAnalysis:
 		'''
 		singularity exec -B {input.data_folder}:/input_data \
 		-B {params.output_dir}:/seekdeep_output \
+		-B {input.genome_root_folder}:/genome_info \
 		{params.softlink_fastq_binding} \
 		-H {params.output_dir}/analysis/:/home/analysis \
 		{input.sif_file} ./runAnalysis.sh {threads}
