@@ -21,7 +21,7 @@ rule copy_files:
 		cp {input.in_config_file} {output.out_config_file}
 		'''
 
-rule get_primer_info:
+rule genTargetInfoFromGenomes:
 	input:
 		data_folder=config['primer_plus_fastq_binding'],
 		genome_root_folder=config['genome_binding'],
@@ -31,7 +31,8 @@ rule get_primer_info:
 		primer_file=config['primer_file'],
 		gff_subfolder=config['gff_subfolder'],
 		genome_subfolder=config['genome_subfolder'],
-		insert_size=config['insert_size']
+		insert_size=config['insert_size'],
+		extra_args=config['extra_gen_target_info_cmds']
 	output:
 		primer_info=config['output_folder']+'/extractedRefSeqs/locationsByGenome/Pf3D7_infos.tab.txt'
 	threads: config['cpus_to_use']
@@ -42,8 +43,8 @@ rule get_primer_info:
 		-B {params.output_dir}:/seekdeep_output {input.sif_file} \
 		SeekDeep genTargetInfoFromGenomes --primers /input_data/{params.primer_file} \
 		--pairedEndLength {params.insert_size} --genomeDir /genome_info/{params.genome_subfolder} \
-		--gffDir /genome_info/{params.gff_subfolder} --dout \
-		/seekdeep_output/extractedRefSeqs --overWriteDir --numThreads \
+		--gffDir /genome_info/{params.gff_subfolder} {params.extra_args} \
+		--dout /seekdeep_output/extractedRefSeqs --overWriteDir --numThreads \
 		{threads}
 		'''
 
@@ -62,6 +63,7 @@ rule setupTarAmpAnalysis:
 		amino_acid_fnp=config['amino_acid_fnp'],
 		for_seekdeep='/seekdeep_output/extractedRefSeqs/forSeekDeep',
 		softlink_fastq_binding=config['softlink_fastq_binding'],
+		extra_args=config['extra_setup_tar_amp_cmds'],
 		extra_extractor_cmds=config['extra_extractor_cmds'],
 		extra_qluster_cmds=config['extra_qluster_cmds'],
 		extra_process_cluster_cmds=config['extra_process_cluster_cmds']
@@ -80,11 +82,9 @@ rule setupTarAmpAnalysis:
 		--idFile /input_data/{params.primer_file} --lenCutOffs \
 		{params.for_seekdeep}/lenCutOffs.txt \
 		--overlapStatusFnp {params.for_seekdeep}/overlapStatuses.txt \
-		--refSeqsDir {params.for_seekdeep}/refSeqs/ \
-		--extraExtractorCmds={params.extra_extractor_cmds} \
-		--extraQlusterCmds={params.extra_qluster_cmds} \
-		--extraProcessClusterCmds={params.extra_process_cluster_cmds} \
-		--numThreads {threads}
+		--refSeqsDir {params.for_seekdeep}/refSeqs/ {params.extra_args} \
+		{params.extra_extractor_cmds} {params.extra_qluster_cmds} \
+		{params.extra_process_cluster_cmds} --numThreads {threads}
 		touch {output.setup_done}
 		'''
 

@@ -1,21 +1,21 @@
 #information about your system
 sif_file_location: /work/bailey_share/bin/elucidator230407.sif #location of downloaded sif file
-output_folder: example_output_folder #this is where output will go
-insert_size: 150 #length (in nt) of each illumina read. Needs to be accurate.
+output_folder: run7_2x300_miseq_600_insertsize #this is where output will go
+insert_size: 600 #length (in nt) of each illumina read. Needs to be accurate.
 cpus_to_use: 14 #higher CPU count speeds up runtime, uses more memory
 #don't exceed your system's available CPU count or available memory.
 
 #this folder should have 3 things: a subfolder of demultiplexed fastq files, a
 #tab delimited file of primers, and a tab delimited file of sample names.
 primer_plus_fastq_binding: /work/asimkin/seekdeep/DR_amplicon_panel/run_seekdeep/output_files
-fastq_subfolder: new_fastq_links2 #name of the demultiplexed fastq folder
+fastq_subfolder: fastq #name of the demultiplexed fastq folder
 primer_file: primers.txt #name of the primer file
 sample_names: sampleNames.tab.txt
 #If the folder of fastq files consists of soft links to fastq files, the path to
 #the original fastq files should be 'bound' in the singularity image. Syntax is:
 #-B original/fastq/location:original/fastq/location
 #(otherwise set this variable as empty quotes '')
-softlink_fastq_binding: '-B /work/bailey_share/raw_data/from_others/221109_UNC22_0993_000000000-KMJ6M/fastq:/work/bailey_share/raw_data/from_others/221109_UNC22_0993_000000000-KMJ6M/fastq'
+softlink_fastq_binding: '-B /work/bailey_share/raw_data/from_others/run7_2x300_miseq:/work/bailey_share/raw_data/from_others/run7_2x300_miseq'
 
 #the genome_binding folder should have 2 things: a subfolder of bowtie2 indexed
 #genomes, and a subfolder of gff gene annotations for each genome. Optionally, a
@@ -28,14 +28,16 @@ amino_acid_fnp: info/pf_drug_resistant_aaPositions_k13_updated.tsv #positions to
 
 #these are seekdeep sensitivity and specificity settings that you can tweak if
 #seekdeep is failing to extract reads or generating inaccurate haplotypes
-extra_qluster_cmds: '"--illuminaAllowHomopolyers"'
-#below example tells seekdeep to remove haplotypes with a readcount making up
-#less than 1% of the data, and which genome, gene annotation, and amino acid
-#site list to use for annotating amino acids
-extra_process_cluster_cmds: '"--lowFreqHaplotypeFracCutOff 0.01
-  --gffFnp /genome_info/info/gff/Pf3D7.gff
-  --genomeFnp /genome_info/genomes/Pf3D7.fasta
-  --knownAminoAcidChangesFnp /genome_info/info/pf_drug_resistant_aaPositions_k13_updated.tsv"'
-extra_extractor_cmds: '"--checkShortenBars
+extra_gen_target_info_cmds: '--writeOutAllSeqsFile'
+extra_setup_tar_amp_cmds: '--defaultOverlapStatus ALL'
+extra_extractor_cmds: '--extraExtractorCmds="--checkShortenBars 
   --checkRevComplementForPrimers"'
+extra_qluster_cmds: '--extraQlusterCmds="--useAllInput
+  --illuminaAllowHomopolyers"'
+extra_process_cluster_cmds: '--extraProcessClusterCmds="--numThreads 14 
+  --runsRequired 2 --stopAfter 100 --pop-stopAfter 100
+  --allowHomopolymerCollapse --sampleMinTotalReadCutOff 25
+  --replicateMinTotalReadCutOff 25 --withinReplicateFracCutOff 0 --fracCutOff 0
+  --lowFreqHaplotypeFracCutOff 0 --oneOffLowFreqMultiplier 0
+  --oneSampOnlyHapsFrac 0 --oneSampOnlyOneOffHapsFrac 0"'
 
