@@ -83,10 +83,7 @@ rule setupTarAmpAnalysis:
 		--refSeqsDir {params.for_seekdeep}/refSeqs/ \
 		--extraExtractorCmds={params.extra_extractor_cmds} \
 		--extraQlusterCmds={params.extra_qluster_cmds} \
-		--extraProcessClusterCmds=" --lowFreqHaplotypeFracCutOff 0.01 \
-		--gffFnp /genome_info/info/gff/Pf3D7.gff \
-		--genomeFnp /genome_info/genomes/Pf3D7.fasta \
-		--knownAminoAcidChangesFnp /genome_info/info/pf_drug_resistant_aaPositions_k13_updated.tsv" \
+		--extraProcessClusterCmds={params.extra_process_cluster_cmds} \
 		--numThreads {threads}
 		touch {output.setup_done}
 		'''
