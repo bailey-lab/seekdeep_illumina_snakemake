@@ -1,5 +1,5 @@
 # seekdeep_illumina_snakemake
-a basic workflow for running Nick Hathaway's seekdeep on nanopore
+a basic workflow for running Nick Hathaway's seekdeep on illumina
 
 ## Installation:
 ### Install conda:
