@@ -31,7 +31,7 @@ rule genTargetInfoFromGenomes:
 		primer_file=config['primer_file'],
 		gff_subfolder=config['gff_subfolder'],
 		genome_subfolder=config['genome_subfolder'],
-		insert_size=config['insert_size'],
+		read_length=config['read_length'],
 		extra_args=config['extra_gen_target_info_cmds']
 	output:
 		primer_info=config['output_folder']+'/extractedRefSeqs/locationsByGenome/Pf3D7_infos.tab.txt'
@@ -42,7 +42,7 @@ rule genTargetInfoFromGenomes:
 		-B {input.data_folder}:/input_data \
 		-B {params.output_dir}:/seekdeep_output {input.sif_file} \
 		SeekDeep genTargetInfoFromGenomes --primers /input_data/{params.primer_file} \
-		--pairedEndLength {params.insert_size} --genomeDir /genome_info/{params.genome_subfolder} \
+		--pairedEndLength {params.read_length} --genomeDir /genome_info/{params.genome_subfolder} \
 		--gffDir /genome_info/{params.gff_subfolder} {params.extra_args} \
 		--dout /seekdeep_output/extractedRefSeqs --overWriteDir --numThreads \
 		{threads}
@@ -60,7 +60,6 @@ rule setupTarAmpAnalysis:
 		fastq_folder=config['fastq_subfolder'],
 		genome_subfolder=config['genome_subfolder'],
 		sample_names=config['sample_names'],
-		amino_acid_fnp=config['amino_acid_fnp'],
 		for_seekdeep='/seekdeep_output/extractedRefSeqs/forSeekDeep',
 		softlink_fastq_binding=config['softlink_fastq_binding'],
 		extra_args=config['extra_setup_tar_amp_cmds'],
