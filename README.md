@@ -2,10 +2,8 @@
 a basic workflow for running Nick Hathaway's seekdeep on illumina
 
 ## Installation:
-### Install conda:
-https://github.com/conda-forge/miniforge#mambaforge
-
-### Create a conda environment and install snakemake and singularity there:
+ - Install conda: https://github.com/conda-forge/miniforge#mambaforge
+ - Create a conda environment and install snakemake and singularity there:
 ```bash
 conda create -c conda-forge -c bioconda -n snakemake snakemake
 conda activate snakemake
