@@ -36,6 +36,10 @@ rule genTargetInfoFromGenomes:
 	output:
 		primer_info=config['output_folder']+'/extractedRefSeqs/locationsByGenome/Pf3D7_infos.tab.txt'
 	threads: config['cpus_to_use']
+	resources:
+		time_min=config['max_run_time_min'],
+		mem_mb=config['max_memory_mb'],
+		nodes=config['cpus_to_use']
 	shell:
 		'''
 		singularity exec -B {input.genome_root_folder}:/genome_info \
@@ -100,6 +104,10 @@ rule runAnalysis:
 #		analysis_done=directory(config['output_folder']+'/analysis/popClustering')
 		analysis_done=config['output_folder']+'/finished_analysis.txt'
 	threads: config['cpus_to_use']
+	resources:
+		time_min=config['max_run_time_min'],
+		mem_mb=config['max_memory_mb'],
+		nodes=config['cpus_to_use']
 	shell:
 		'''
 		singularity exec -B {input.data_folder}:/input_data \
