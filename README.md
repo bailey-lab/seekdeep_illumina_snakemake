@@ -1,5 +1,5 @@
 # seekdeep_illumina_snakemake
-a basic workflow for running Nick Hathaway's seekdeep on illumina
+a basic workflow for running Nick Hathaway's seekdeep on illumina. This version splits up jobs into individual snakemake submissions.
 
 ## Installation:
  - Install conda: https://github.com/conda-forge/miniforge#mambaforge
