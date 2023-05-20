@@ -91,7 +91,8 @@ rule setupTarAmpAnalysis:
 		touch {output.setup_done}
 		'''
 
-rule runAnalysis:
+extractor_commands=[line.strip() for line in open(config['output_folder']+'/analysis/extractorCmds.txt')]
+rule run_extractor:
 	input:
 		data_folder=config['primer_plus_fastq_binding'],
 		sif_file=config['sif_file_location'],
@@ -99,10 +100,10 @@ rule runAnalysis:
 		genome_root_folder=config['genome_binding']
 	params:
 		output_dir=config['output_folder'],
-		softlink_fastq_binding=config['softlink_fastq_binding']
+		softlink_fastq_binding=config['softlink_fastq_binding'],
+		command=lambda wildcards: extractor_commands[int(wildcards.number)]
 	output:
-#		analysis_done=directory(config['output_folder']+'/analysis/popClustering')
-		analysis_done=config['output_folder']+'/finished_analysis.txt'
+		extractor_done=config['output_folder']+'/extractor_jobs/{number}_extractor_done.txt'
 	threads: config['cpus_to_use']
 	resources:
 		time_min=config['max_run_time_min'],
@@ -115,6 +116,96 @@ rule runAnalysis:
 		-B {input.genome_root_folder}:/genome_info \
 		{params.softlink_fastq_binding} \
 		-H {params.output_dir}/analysis/:/home/analysis \
-		{input.sif_file} ./runAnalysis.sh {threads}
-		touch {output.analysis_done}
+		{input.sif_file} {params.command}
+		touch {output.extractor_done}
 		'''
+
+qluster_commands=[line.strip() for line in open(config['output_folder']+'/analysis/qlusterCmds.txt')]
+rule run_qluster:
+	input:
+		data_folder=config['primer_plus_fastq_binding'],
+		sif_file=config['sif_file_location'],
+		genome_root_folder=config['genome_binding']
+		extractor_files=expand(config['output_folder']+'/extractor_jobs/{number}_extractor_done.txt', number=list(range(extractor_commands)))
+	params:
+		output_dir=config['output_folder'],
+		softlink_fastq_binding=config['softlink_fastq_binding'],
+		command=lambda wildcards: qluster_commands[int(wildcards.number)]
+	output:
+		qluster_done=config['output_folder']+'/qluster_jobs/{number}_qluster_done.txt')
+	threads: config['cpus_to_use']
+	resources:
+		time_min=config['max_run_time_min'],
+		mem_mb=config['max_memory_mb'],
+		nodes=config['cpus_to_use']
+	shell:
+		'''
+		singularity exec -B {input.data_folder}:/input_data \
+		-B {params.output_dir}:/seekdeep_output \
+		-B {input.genome_root_folder}:/genome_info \
+		{params.softlink_fastq_binding} \
+		-H {params.output_dir}/analysis/:/home/analysis \
+		{input.sif_file} {params.command}
+		touch {output.qluster_done}
+		'''
+
+process_cluster_commands=[line.strip() for line in open(config['output_folder']+'/analysis/processClusterCmds.txt')]
+rule run_process_cluster:
+	input:
+		data_folder=config['primer_plus_fastq_binding'],
+		sif_file=config['sif_file_location'],
+		setup_done=config['output_folder']+'/finished_setup.txt',
+		genome_root_folder=config['genome_binding']
+		qluster_files=expand(config['output_folder']+'/qluster_jobs/{number}_qluster_done.txt', number=list(range(qluster_commands)))
+	params:
+		output_dir=config['output_folder'],
+		softlink_fastq_binding=config['softlink_fastq_binding'],
+		command=lambda wildcards: process_cluster_commands[int(wildcards.number)]
+	output:
+		process_cluster_done=config['output_folder']+'/process_cluster_jobs/{number}_process_cluster_done.txt'
+	threads: config['cpus_to_use']
+	resources:
+		time_min=config['max_run_time_min'],
+		mem_mb=config['max_memory_mb'],
+		nodes=config['cpus_to_use']
+	shell:
+		'''
+		singularity exec -B {input.data_folder}:/input_data \
+		-B {params.output_dir}:/seekdeep_output \
+		-B {input.genome_root_folder}:/genome_info \
+		{params.softlink_fastq_binding} \
+		-H {params.output_dir}/analysis/:/home/analysis \
+		{input.sif_file} {params.command}
+		touch {output.process_cluster_done}
+		'''
+
+gen_config_commands=[line.strip() for line in open(config['output_folder']+'/analysis/genConfigCmds.txt')]
+rule gen_config:
+	input:
+		data_folder=config['primer_plus_fastq_binding'],
+		sif_file=config['sif_file_location'],
+		setup_done=config['output_folder']+'/finished_setup.txt',
+		genome_root_folder=config['genome_binding']
+		process_cluster_files=expand(config['output_folder']+'/process_cluster_jobs/{number}_process_cluster_done.txt', number=list(range(process_cluster_commands)))
+	params:
+		output_dir=config['output_folder'],
+		softlink_fastq_binding=config['softlink_fastq_binding'],
+		command=lambda wildcards: gen_config_commands[int(wildcards.number)]
+	output:
+		gen_config_done=config['output_folder']+'/gen_config_jobs/{number}_gen_config_done.txt'
+	threads: config['cpus_to_use']
+	resources:
+		time_min=config['max_run_time_min'],
+		mem_mb=config['max_memory_mb'],
+		nodes=config['cpus_to_use']
+	shell:
+		'''
+		singularity exec -B {input.data_folder}:/input_data \
+		-B {params.output_dir}:/seekdeep_output \
+		-B {input.genome_root_folder}:/genome_info \
+		{params.softlink_fastq_binding} \
+		-H {params.output_dir}/analysis/:/home/analysis \
+		{input.sif_file} {params.command}
+		touch {output.gen_config_done}
+		'''
+
