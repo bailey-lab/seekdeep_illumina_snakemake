@@ -1,7 +1,7 @@
 configfile: 'seekdeep_illumina_general.yaml'
 rule all:
 	input:
-		analysis_done=config['output_folder']+'/finished_analysis.txt',
+		all_finished=config['output_folder']+'/all_finished.txt',
 		out_snakefile=config['output_folder']+'/seekdeep_illumina_general.smk',
 		out_config_file=config['output_folder']+'/seekdeep_illumina_general.yaml'
 
@@ -125,14 +125,14 @@ rule run_qluster:
 	input:
 		data_folder=config['primer_plus_fastq_binding'],
 		sif_file=config['sif_file_location'],
-		genome_root_folder=config['genome_binding']
+		genome_root_folder=config['genome_binding'],
 		extractor_files=expand(config['output_folder']+'/extractor_jobs/{number}_extractor_done.txt', number=list(range(extractor_commands)))
 	params:
 		output_dir=config['output_folder'],
 		softlink_fastq_binding=config['softlink_fastq_binding'],
 		command=lambda wildcards: qluster_commands[int(wildcards.number)]
 	output:
-		qluster_done=config['output_folder']+'/qluster_jobs/{number}_qluster_done.txt')
+		qluster_done=config['output_folder']+'/qluster_jobs/{number}_qluster_done.txt'
 	threads: config['cpus_to_use']
 	resources:
 		time_min=config['max_run_time_min'],
@@ -155,7 +155,7 @@ rule run_process_cluster:
 		data_folder=config['primer_plus_fastq_binding'],
 		sif_file=config['sif_file_location'],
 		setup_done=config['output_folder']+'/finished_setup.txt',
-		genome_root_folder=config['genome_binding']
+		genome_root_folder=config['genome_binding'],
 		qluster_files=expand(config['output_folder']+'/qluster_jobs/{number}_qluster_done.txt', number=list(range(qluster_commands)))
 	params:
 		output_dir=config['output_folder'],
@@ -185,14 +185,15 @@ rule gen_config:
 		data_folder=config['primer_plus_fastq_binding'],
 		sif_file=config['sif_file_location'],
 		setup_done=config['output_folder']+'/finished_setup.txt',
-		genome_root_folder=config['genome_binding']
+		genome_root_folder=config['genome_binding'],
 		process_cluster_files=expand(config['output_folder']+'/process_cluster_jobs/{number}_process_cluster_done.txt', number=list(range(process_cluster_commands)))
 	params:
 		output_dir=config['output_folder'],
 		softlink_fastq_binding=config['softlink_fastq_binding'],
 		command=lambda wildcards: gen_config_commands[int(wildcards.number)]
 	output:
-		gen_config_done=config['output_folder']+'/gen_config_jobs/{number}_gen_config_done.txt'
+		gen_config_done=config['output_folder']+'/gen_config_jobs/{number}_gen_config_done.txt',
+		all_finished=config['output_folder']+'/all_finished.txt'
 	threads: config['cpus_to_use']
 	resources:
 		time_min=config['max_run_time_min'],
