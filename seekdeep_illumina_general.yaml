@@ -4,7 +4,7 @@ output_folder: day_vs_ideel_results_separate_cluster_submission #this is where o
 read_length: 300 #length (in nt) of each illumina read. Needs to be accurate.
 cpus_to_use: 8 #higher CPU count speeds up runtime, uses more memory
 max_run_time_min: 5760 #maximum amount of time you think this job will take
-max_memory_mb: 50000 #maximum amount of memory you think this job will need
+max_memory_mb: 150000 #maximum amount of memory you think this job will need
 
 #don't exceed your system's available CPU count or available memory.
 
@@ -43,3 +43,76 @@ extra_process_cluster_cmds: '--extraProcessClusterCmds="--numThreads 8
   --lowFreqHaplotypeFracCutOff 0 --oneOffLowFreqMultiplier 0
   --oneSampOnlyHapsFrac 0 --oneSampOnlyOneOffHapsFrac 0"'
 
+samples:
+  - day1001-rep1
+  - day1001-rep2
+  - day1002-rep1
+  - day1002-rep2
+  - day1003-rep1
+  - day1003-rep2
+  - day101-rep1
+  - day101-rep2
+  - day102-rep1
+  - day102-rep2
+  - day103-rep1
+  - day103-rep2
+  - day10K1-rep1
+  - day10K1-rep2
+  - day10K2-rep1
+  - day10K2-rep2
+  - day10K3-rep1
+  - day10K3-rep2
+  - day10S1-rep1
+  - day10S1-rep2
+  - day10S2-rep1
+  - day10S2-rep2
+  - day10S3-rep1
+  - day10S3-rep2
+  - dayDd2-rep1
+  - dayDd2-rep2
+  - dayDd2-rep3
+  - dayDd2-rep4
+  - dayDd2-rep5
+  - dayDd2-rep6
+  - dayHB3-rep1
+  - dayHB3-rep2
+  - dayHB3-rep3
+  - dayHB3-rep4
+  - dayHB3-rep5
+  - dayHB3-rep6
+  - ideel1001-rep1
+  - ideel1001-rep2
+  - ideel1002-rep1
+  - ideel1002-rep2
+  - ideel1003-rep1
+  - ideel1003-rep2
+  - ideel101-rep1
+  - ideel101-rep2
+  - ideel102-rep1
+  - ideel102-rep2
+  - ideel103-rep1
+  - ideel103-rep2
+  - ideel10K1-rep1
+  - ideel10K1-rep2
+  - ideel10K2-rep1
+  - ideel10K2-rep2
+  - ideel10K3-rep1
+  - ideel10K3-rep2
+  - ideel10S1-rep1
+  - ideel10S1-rep2
+  - ideel10S2-rep1
+  - ideel10S2-rep2
+  - ideel10S3-rep1
+  - ideel10S3-rep2
+  - ideelDd2-rep1
+  - ideelDd2-rep2
+  - ideelDd2-rep3
+  - ideelDd2-rep4
+  - ideelDd2-rep5
+  - ideelDd2-rep6
+  - ideelHB3-rep1
+  - ideelHB3-rep2
+  - ideelHB3-rep3
+  - ideelHB3-rep4
+  - ideelHB3-rep5
+  - ideelHB3-rep6
