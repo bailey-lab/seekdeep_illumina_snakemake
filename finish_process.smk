@@ -18,7 +18,7 @@ rule all:
 #		all_sample_commands=expand(config['output_folder']+'/qluster_shell_commands/{sample}_qluster_command.sh', sample=[line.strip() for line in open(config['output_folder']+'/non-empty_extractions.txt')]),
 #		qluster_output=get_qluster_fastqs
 #		all_process_cluster_commands=expand(config['output_folder']+'/process_cluster_shell_commands/{amplicon}_process_cluster_command.sh', amplicon=amplicons)
-		analysis_folder=expand(config['output_folder']+'/analysis/popClustering/analysis/{amplicon}', amplicon=amplicons)
+		analysis_folder=expand(config['output_folder']+'/analysis/popClustering/{amplicon}/analysis/selectedClustersInfo.tab.txt.gz', amplicon=amplicons)
 
 
 rule prep_qluster:
@@ -82,7 +82,7 @@ rule run_process_cluster:
 		softlink_fastq_binding=config['softlink_fastq_binding'],
 		singularity_process_cluster_command='/seekdeep_output/process_cluster_shell_commands/{amplicon}_process_cluster_command.sh'
 	output:
-		analysis_folder=directory(config['output_folder']+'/analysis/popClustering/analysis/{amplicon}')
+		analysis_folder=config['output_folder']+'/analysis/popClustering/{amplicon}/analysis/selectedClustersInfo.tab.txt.gz'
 	threads: config['cpus_to_use']
 	resources:
 		time_min=config['max_run_time_min'],
