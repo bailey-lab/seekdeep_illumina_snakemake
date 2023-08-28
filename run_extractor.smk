@@ -19,7 +19,7 @@ rule run_extractor:
 	input:
 		data_folder=config['primer_plus_fastq_binding'],
 		sif_file=config['sif_file_location'],
-		setup_done=config['output_folder']+'/finished_setup.txt',
+#		setup_done=config['output_folder']+'/finished_setup.txt',
 		genome_root_folder=config['genome_binding'],
 		actual_shell_script=config['output_folder']+'/extractor_shell_commands/{sample}_extraction_command.sh'	
 	params:
@@ -27,7 +27,8 @@ rule run_extractor:
 		softlink_fastq_binding=config['softlink_fastq_binding'],
 		singularity_shell_script='/seekdeep_output/extractor_shell_commands/{sample}_extraction_command.sh'	
 	output:
-		profile=config['output_folder']+'/analysis/{sample}_extraction/extractionProfile.tab.txt'
+		profile=config['output_folder']+'/analysis/{sample}_extraction/extractionProfile.tab.txt',
+		folder=directory(config['output_folder']+'/analysis/{sample}_extraction')
 	threads: config['cpus_to_use']
 	resources:
 		time_min=config['max_run_time_min'],

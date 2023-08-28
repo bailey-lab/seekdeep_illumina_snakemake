@@ -1,10 +1,10 @@
 #information about your system
 sif_file_location: /nfs/jbailey5/baileyweb/bailey_share/bin/elucidator230407.sif #location of downloaded sif file
-output_folder: day_vs_ideel_results_separate_cluster_submission #this is where output will go
+output_folder: day_vs_ideel_results_separate_cluster_submission2 #this is where output will go
 read_length: 300 #length (in nt) of each illumina read. Needs to be accurate.
 cpus_to_use: 8 #higher CPU count speeds up runtime, uses more memory
 max_run_time_min: 5760 #maximum amount of time you think this job will take
-max_memory_mb: 300000 #maximum amount of memory you think this job will need
+max_memory_mb: 30000 #maximum amount of memory you think this job will need
 
 #don't exceed your system's available CPU count or available memory.
 
