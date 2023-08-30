@@ -1,0 +1,7 @@
+jobs: 100
+cluster: "sbatch -t {resources.time_min} -p batch --mem={resources.mem_mb} -n {resources.nodes} --output={rule}_{wildcards}_out --error={rule}_{wildcards}_error --mail-user=your_username@email_provider --mail-type=FAIL"
+default-resources: [nodes=1, mem_mb=4000, time_min=120]
+resources: [nodes=200, mem_mb=1000000]
+keep-going: true
+latency-wait: 60
+#restart-times: 3
