@@ -4,11 +4,11 @@ a basic workflow for running Nick Hathaway's seekdeep on illumina. This version 
 ## Installation:
  - Install mamba: https://github.com/conda-forge/miniforge#install (don't forget
 to do conda init and follow the instructions to log out and back in at the end)
- - Create a conda environment and install snakemake and singularity there:
+ - Create a mamba environment and install snakemake and singularity there:
 ```bash
-conda create -c conda-forge -c bioconda -n snakemake snakemake
-conda activate snakemake
-conda install -c conda-forge singularity
+mamba create -c conda-forge -c bioconda -n snakemake snakemake
+mamba activate snakemake
+mamba install -c conda-forge singularity
 ```
 
 ### Setup your environment:
@@ -24,9 +24,21 @@ notepad++, gedit, micro, emacs, vim, vi, etc.)
 ```bash
 mamba activate snakemake
 ```
- - Run snakemake with:
+ - If on a slurm system, edit the slurm/config.yaml file to match sbatch job
+submission instructions of your system, or if not on a slurm system, edit the
+non_slurm/config.yaml file. (If you already have a slurm or non_slurm profile
+saved in ~/.config/snakemake/slurm, you can delete the slurm or non_slurm
+folder)
+ - Run all steps with (e.g. if using a slurm profile):
 ```bash
-snakemake -s seekdeep_illumina_general.smk --cores [your_desired_core_count]
+snakemake -s setup_run.smk --profile slurm
+snakemake -s run_extractor.smk --profile slurm
+snakemake -s finish_process.smk --profile slurm
+```
+ - You can also run all steps (editing the file with an appropriate --profile
+name) with:
+```bash
+bash run_all_steps.sh
 ```
 
 ## Help:
