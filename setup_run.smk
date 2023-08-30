@@ -1,24 +1,37 @@
 configfile: 'seekdeep_illumina_general.yaml'
+out_folder=config['output_folder']
 rule all:
 	input:
-		setup_done=config['output_folder']+'/finished_setup.txt',
-		out_snakefile=config['output_folder']+'/seekdeep_illumina_general.smk',
-		out_config_file=config['output_folder']+'/seekdeep_illumina_general.yaml'
+		setup_done=out_folder+'/finished_setup.txt',
+		out_snakefile=out_folder+'/setup_run.smk',
+		out_config_file=out_folder+'/seekdeep_illumina_general.yaml'
 
 rule copy_files:
 	'''
 	copies snakemake script and config files to output folder for reproducibility.
 	'''
 	input:
-		in_snakefile='seekdeep_illumina_general.smk',
-		in_config_file='seekdeep_illumina_general.yaml'
+		setup_file='setup_run.smk',
+		extractor_file='run_extractor.smk',
+		finish_file='finish_process.smk',
+		all_steps='run_pipeline.sh',
+		scripts='scripts',
+		config_file='seekdeep_illumina_general.yaml'
 	output:
-		out_snakefile=config['output_folder']+'/seekdeep_illumina_general.smk',
-		out_config_file=config['output_folder']+'/seekdeep_illumina_general.yaml'
+		setup_file=out_folder+'/snakemake_params/setup_run.smk',
+		extractor_file=out_folder'/snakemake_params/run_extractor.smk',
+		finish_file=out_folder+'/snakemake_params/finish_process.smk',
+		all_steps=out_folder+'/snakemake_params/run_pipeline.sh',
+		scripts=directory(out_folder+'/snakemake_params/scripts'),
+		config_file=out_folder+'/snakemake_params/seekdeep_illumina_general.yaml'
 	shell:
 		'''
-		cp {input.in_snakefile} {output.out_snakefile}
-		cp {input.in_config_file} {output.out_config_file}
+		cp input.setup_file output.setup_file,
+		cp input.extractor_file output.extractor_file
+		cp input.finish_file output.finish_file
+		cp input.all_steps output.all_steps
+		cp -r input.scripts output.scripts
+		cp input.config_file output.config_file
 		'''
 
 rule genTargetInfoFromGenomes:
@@ -27,14 +40,14 @@ rule genTargetInfoFromGenomes:
 		genome_root_folder=config['genome_binding'],
 		sif_file=config['sif_file_location']
 	params:
-		output_dir=config['output_folder'],
+		output_dir=out_folder,
 		primer_file=config['primer_file'],
 		gff_subfolder=config['gff_subfolder'],
 		genome_subfolder=config['genome_subfolder'],
 		read_length=config['read_length'],
 		extra_args=config['extra_gen_target_info_cmds']
 	output:
-		primer_info=config['output_folder']+'/extractedRefSeqs/locationsByGenome/Pf3D7_infos.tab.txt'
+		primer_info=out_folder+'/extractedRefSeqs/locationsByGenome/Pf3D7_infos.tab.txt'
 	threads: config['cpus_to_use']
 	resources:
 		time_min=config['max_run_time_min'],
@@ -57,9 +70,9 @@ rule setupTarAmpAnalysis:
 		data_folder=config['primer_plus_fastq_binding'],
 		genome_root_folder=config['genome_binding'],
 		sif_file=config['sif_file_location'],
-		primer_info=config['output_folder']+'/extractedRefSeqs/locationsByGenome/Pf3D7_infos.tab.txt'
+		primer_info=out_folder+'/extractedRefSeqs/locationsByGenome/Pf3D7_infos.tab.txt'
 	params:
-		output_dir=config['output_folder'],
+		output_dir=out_folder,
 		primer_file=config['primer_file'],
 		fastq_folder=config['fastq_subfolder'],
 		genome_subfolder=config['genome_subfolder'],
@@ -72,7 +85,7 @@ rule setupTarAmpAnalysis:
 		extra_process_cluster_cmds=config['extra_process_cluster_cmds']
 	threads: config['cpus_to_use']
 	output:
-		setup_done=config['output_folder']+'/finished_setup.txt'
+		setup_done=out_folder+'/finished_setup.txt'
 	shell:
 		'''
 		singularity exec -B {input.data_folder}:/input_data \
