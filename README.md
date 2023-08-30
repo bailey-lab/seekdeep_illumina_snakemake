@@ -2,7 +2,8 @@
 a basic workflow for running Nick Hathaway's seekdeep on illumina. This version splits up jobs into individual snakemake submissions.
 
 ## Installation:
- - Install conda: https://github.com/conda-forge/miniforge#mambaforge
+ - Install mamba: https://github.com/conda-forge/miniforge#install (don't forget
+to do conda init and follow the instructions to log out and back in at the end)
  - Create a conda environment and install snakemake and singularity there:
 ```bash
 conda create -c conda-forge -c bioconda -n snakemake snakemake
@@ -12,16 +13,16 @@ conda install -c conda-forge singularity
 
 ### Setup your environment:
  - Change directory to a folder where you want to run the analysis
- - Download the seekdeep_illumina_general.smk file into this folder
- - Download the seekdeep_illumina_general.yaml file into the same folder
+ - clone this repository with git clone web_address - you can get the web_address from the green 'code' button
  - Download the sif file from here into the same folder: https://seekdeep.brown.edu/programs/elucidator.sif
 
-
 ## Usage:
- - Edit the config.yaml file using the instructions in the comments. Use a text editor that outputs unix line endings (e.g. vscode, notepad++, gedit, micro, emacs, vim, vi, etc.)
+ - Edit the seekdeep_illumina_general.yaml file using the instructions in the
+comments. Use a text editor that outputs unix line endings (e.g. vscode,
+notepad++, gedit, micro, emacs, vim, vi, etc.)
  - If snakemake is not your active conda environment, activate snakemake with:
 ```bash
-conda activate snakemake
+mamba activate snakemake
 ```
  - Run snakemake with:
 ```bash
