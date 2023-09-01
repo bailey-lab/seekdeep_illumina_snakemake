@@ -1,6 +1,6 @@
 #information about your system
 sif_file_location: /nfs/jbailey5/baileyweb/bailey_share/bin/elucidator230407.sif #location of downloaded sif file
-output_folder: /nfs/jbailey5/baileyweb/asimkin/seekdeep/DR_amplicon_panel/protocol_1.9/output #this is where output will go
+output_folder: /nfs/jbailey5/baileyweb/asimkin/seekdeep/DR_amplicon_panel/protocol_1.9/output2 #this is where output will go
 read_length: 150 #length (in nt) of each illumina read. Needs to be accurate.
 cpus_to_use: 8 #higher CPU count speeds up runtime, uses more memory
 max_run_time_min: 5760 #maximum amount of time you think this job will take

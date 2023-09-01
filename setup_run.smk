@@ -3,8 +3,8 @@ out_folder=config['output_folder']
 rule all:
 	input:
 		setup_done=out_folder+'/finished_setup.txt',
-		out_snakefile=out_folder+'/setup_run.smk',
-		out_config_file=out_folder+'/seekdeep_illumina_general.yaml'
+		out_snakefile=out_folder+'/snakemake_params/setup_run.smk',
+		out_config_file=out_folder+'/snakemake_params/seekdeep_illumina_general.yaml'
 
 rule copy_files:
 	'''
@@ -19,19 +19,19 @@ rule copy_files:
 		config_file='seekdeep_illumina_general.yaml'
 	output:
 		setup_file=out_folder+'/snakemake_params/setup_run.smk',
-		extractor_file=out_folder'/snakemake_params/run_extractor.smk',
+		extractor_file=out_folder+'/snakemake_params/run_extractor.smk',
 		finish_file=out_folder+'/snakemake_params/finish_process.smk',
 		all_steps=out_folder+'/snakemake_params/run_pipeline.sh',
 		scripts=directory(out_folder+'/snakemake_params/scripts'),
 		config_file=out_folder+'/snakemake_params/seekdeep_illumina_general.yaml'
 	shell:
 		'''
-		cp input.setup_file output.setup_file,
-		cp input.extractor_file output.extractor_file
-		cp input.finish_file output.finish_file
-		cp input.all_steps output.all_steps
-		cp -r input.scripts output.scripts
-		cp input.config_file output.config_file
+		cp {input.setup_file} {output.setup_file}
+		cp {input.extractor_file} {output.extractor_file}
+		cp {input.finish_file} {output.finish_file}
+		cp {input.all_steps} {output.all_steps}
+		cp -r {input.scripts} {output.scripts}
+		cp {input.config_file} {output.config_file}
 		'''
 
 rule genTargetInfoFromGenomes:
