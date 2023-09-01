@@ -1,19 +1,18 @@
 import os
 folders=snakemake.input['folders']
-samples=snakemake.params['samples']
 runnable_samples=open(snakemake.output['runnable_samples'], 'w')
 
 def find_fastqs(folder):
 	good_files=[]
 	for root, dirs, files in os.walk(folder):
 		for file_name in files:
-			if file_name.endswith('.fastq.gz'):
+			if file_name.endswith('.fastq.gz') and file_name[:-9]!='output':
 				good_files.append(root+'/'+file_name)
 	return good_files
 
-for sample_number, sample in enumerate(samples):
+for folder in folders:
 	read_fastq='something'
-	good_files=find_fastqs(folders[sample_number])
+	good_files=find_fastqs(folder)
 	if len(good_files)>0:
 		for good_file in good_files:
 			if os.path.getsize(good_file)>0:
