@@ -48,8 +48,6 @@ rule analyze_extractor:
 	input:
 		profiles=expand(config['output_folder']+'/analysis/{sample}_extraction/extractionProfile.tab.txt', sample=config['samples']),
 		folders=expand(config['output_folder']+'/analysis/{sample}_extraction', sample=config['samples'])
-	params:
-		samples=config['samples']
 	output:
 		runnable_samples=config['output_folder']+'/non-empty_extractions.txt'
 	script:
