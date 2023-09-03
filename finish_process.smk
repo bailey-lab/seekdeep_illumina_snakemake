@@ -18,8 +18,8 @@ rule all:
 #		all_sample_commands=expand(config['output_folder']+'/qluster_shell_commands/{sample}_qluster_command.sh', sample=[line.strip() for line in open(config['output_folder']+'/non-empty_extractions.txt')]),
 #		qluster_output=get_qluster_fastqs
 #		all_process_cluster_commands=expand(config['output_folder']+'/process_cluster_shell_commands/{amplicon}_process_cluster_command.sh', amplicon=amplicons)
-		analysis_folder=expand(config['output_folder']+'/analysis/popClustering/{amplicon}/analysis/selectedClustersInfo.tab.txt.gz', amplicon=amplicons)
-
+#		analysis_folder=expand(config['output_folder']+'/analysis/popClustering/{amplicon}/analysis/selectedClustersInfo.tab.txt.gz', amplicon=amplicons)
+		process_pairs=config['output_folder']+'/analysis/reports/allProcessPairsCounts.tab.txt'
 
 rule prep_qluster:
 	input:
@@ -98,6 +98,24 @@ rule run_process_cluster:
 		{input.sif_file} bash {params.singularity_process_cluster_command}
 		'''
 
+rule combine_stats:
+	input:
+		analysis_folder=expand(config['output_folder']+'/analysis/popClustering/{amplicon}/analysis/selectedClustersInfo.tab.txt.gz', amplicon=amplicons),
+		sif_file=config['sif_file_location']
+	params:
+		output_dir=config['output_folder'],
+		command='combineExtractionCountsCmd.sh'
+	output:
+		extraction_profile=config['output_folder']+'/analysis/reports/allExtractionProfile.tab.txt',
+		failed_primers=config['output_folder']+'/analysis/reports/combinedAllFailedPrimerCounts.tab.txt',
+		extraction_stats=config['output_folder']+'/analysis/reports/allExtractionStats.tab.txt',
+		process_pairs=config['output_folder']+'/analysis/reports/allProcessPairsCounts.tab.txt'
+	shell:
+		'''
+		singularity exec -B {params.output_dir}:/seekdeep_output \
+		-H {params.output_dir}/analysis/:/home/analysis \
+		{input.sif_file} bash {params.command}
+		'''
 #gen_config_commands=[line.strip() for line in open(config['output_folder']+'/analysis/genConfigCmds.txt')]
 #rule gen_config:
 #	input:
