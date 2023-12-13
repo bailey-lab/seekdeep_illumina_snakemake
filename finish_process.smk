@@ -45,7 +45,6 @@ rule run_qluster:
 		singularity_qluster_file='/seekdeep_output/qluster_shell_commands/{sample}_qluster_command.sh'
 	output:
 		qluster_output=config['output_folder']+'/analysis/{sample_prefix}_extraction/{sample}_qlusterOut/output.fastq.gz'
-	threads: config['cpus_to_use']
 	resources:
 		time_min=config['max_run_time_min'],
 		mem_mb=config['max_memory_mb'],
