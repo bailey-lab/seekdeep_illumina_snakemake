@@ -29,7 +29,6 @@ rule run_extractor:
 	output:
 		profile=config['output_folder']+'/analysis/{sample}_extraction/extractionProfile.tab.txt',
 		folder=directory(config['output_folder']+'/analysis/{sample}_extraction')
-	threads: config['cpus_to_use']
 	resources:
 		time_min=config['max_run_time_min'],
 		mem_mb=config['max_memory_mb'],
