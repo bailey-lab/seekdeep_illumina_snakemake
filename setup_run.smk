@@ -97,7 +97,6 @@ rule setupTarAmpAnalysis:
 		--inputDir /input_data/{params.fastq_folder} \
 		--idFile /input_data/{params.primer_file} --lenCutOffs \
 		{params.for_seekdeep}/lenCutOffs.txt \
-		--overlapStatusFnp {params.for_seekdeep}/overlapStatuses.txt \
 		--refSeqsDir {params.for_seekdeep}/refSeqs/ {params.extra_args} \
 		{params.extra_extractor_cmds} {params.extra_qluster_cmds} \
 		{params.extra_process_cluster_cmds} --numThreads {threads}
