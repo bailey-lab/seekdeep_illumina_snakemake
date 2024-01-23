@@ -9,7 +9,8 @@ rule prep_extractor:
 	input:
 		extractor_commands=config['output_folder']+'/analysis/extractorCmds.txt'
 	params:
-		output_folder=config['output_folder']+'/extractor_shell_commands'
+		output_folder=config['output_folder']+'/extractor_shell_commands',
+		analysis_dir=config['output_folder']+'/analysis'
 	output:
 		all_sample_commands=expand(config['output_folder']+'/extractor_shell_commands/{sample}_extraction_command.sh', sample=config['samples'])
 	script:
@@ -25,7 +26,7 @@ rule run_extractor:
 	params:
 		output_dir=config['output_folder'],
 		softlink_fastq_binding=config['softlink_fastq_binding'],
-		singularity_shell_script='/seekdeep_output/extractor_shell_commands/{sample}_extraction_command.sh'	
+		singularity_shell_script='/seekdeep_output/extractor_shell_commands/{sample}_extraction_command.sh'
 	output:
 		profile=config['output_folder']+'/analysis/{sample}_extraction/extractionProfile.tab.txt',
 		folder=directory(config['output_folder']+'/analysis/{sample}_extraction')
@@ -38,8 +39,8 @@ rule run_extractor:
 		singularity exec -B {input.data_folder}:/input_data \
 		-B {params.output_dir}:/seekdeep_output \
 		-B {input.genome_root_folder}:/genome_info \
+		-B {params.output_dir}/analysis:/home/analysis \
 		{params.softlink_fastq_binding} \
-		-H {params.output_dir}/analysis/:/home/analysis \
 		{input.sif_file} bash {params.singularity_shell_script}
 		'''
 
