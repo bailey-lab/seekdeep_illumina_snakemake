@@ -10,7 +10,7 @@ rule prep_extractor:
 		extractor_commands=config['output_folder']+'/analysis/extractorCmds.txt'
 	params:
 		output_folder=config['output_folder']+'/extractor_shell_commands',
-		analysis_dir=config['output_folder']+'/analysis'
+		analysis_dir='/home/analysis'
 	output:
 		all_sample_commands=expand(config['output_folder']+'/extractor_shell_commands/{sample}_extraction_command.sh', sample=config['samples'])
 	script:
