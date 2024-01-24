@@ -26,7 +26,8 @@ rule prep_qluster:
 		runnable_samples=config['output_folder']+'/non-empty_extractions.txt',
 		qluster_commands=config['output_folder']+'/analysis/qlusterCmds.txt'
 	params:
-		output_folder=config['output_folder']+'/qluster_shell_commands'
+		output_folder=config['output_folder']+'/qluster_shell_commands',
+		analysis_dir='/home/analysis'
 	output:
 		all_sample_commands=expand(config['output_folder']+'/qluster_shell_commands/{sample}_qluster_command.sh', sample=[line.strip() for line in open(config['output_folder']+'/non-empty_extractions.txt')])
 	script:
@@ -38,7 +39,6 @@ rule run_qluster:
 		data_folder=config['primer_plus_fastq_binding'],
 		sif_file=config['sif_file_location'],
 		genome_root_folder=config['genome_binding'],
-		actual_qluster_file=config['output_folder']+'/qluster_shell_commands/{sample}_qluster_command.sh'
 	params:
 		output_dir=config['output_folder'],
 		softlink_fastq_binding=config['softlink_fastq_binding'],
@@ -54,8 +54,8 @@ rule run_qluster:
 		singularity exec -B {input.data_folder}:/input_data \
 		-B {params.output_dir}:/seekdeep_output \
 		-B {input.genome_root_folder}:/genome_info \
+		-B {params.output_dir}/analysis/:/home/analysis \
 		{params.softlink_fastq_binding} \
-		-H {params.output_dir}/analysis/:/home/analysis \
 		{input.sif_file} bash {params.singularity_qluster_file}
 		'''
 
@@ -64,7 +64,8 @@ rule prep_process_cluster:
 		process_cluster_commands=config['output_folder']+'/analysis/processClusterCmds.txt',
 		qluster_done=get_qluster_fastqs
 	params:
-		output_folder=config['output_folder']+'/process_cluster_shell_commands'
+		output_folder=config['output_folder']+'/process_cluster_shell_commands',
+		analysis_dir='/home/analysis'
 	output:
 		all_process_cluster_commands=expand(config['output_folder']+'/process_cluster_shell_commands/{amplicon}_process_cluster_command.sh', amplicon=amplicons)
 	script:
@@ -92,8 +93,8 @@ rule run_process_cluster:
 		singularity exec -B {input.data_folder}:/input_data \
 		-B {params.output_dir}:/seekdeep_output \
 		-B {input.genome_root_folder}:/genome_info \
+		-B {params.output_dir}/analysis/:/home/analysis \
 		{params.softlink_fastq_binding} \
-		-H {params.output_dir}/analysis/:/home/analysis \
 		{input.sif_file} bash {params.singularity_process_cluster_command}
 		'''
 
@@ -112,7 +113,7 @@ rule combine_stats:
 	shell:
 		'''
 		singularity exec -B {params.output_dir}:/seekdeep_output \
-		-H {params.output_dir}/analysis/:/home/analysis \
+		-B {params.output_dir}/analysis/:/home/analysis \
 		{input.sif_file} bash {params.command}
 		'''
 #gen_config_commands=[line.strip() for line in open(config['output_folder']+'/analysis/genConfigCmds.txt')]
