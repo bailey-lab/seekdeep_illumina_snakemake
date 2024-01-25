@@ -9,6 +9,6 @@ for line in open(qluster_commands):
 	sample_index=split_line.index('-f')+1
 	sample=split_line[sample_index].split('.fastq')[0]
 	output_file=open(output_folder+f'/{sample}_qluster_command.sh', 'w')
-	output_file.write('cd {analysis_dir}\n')
+	output_file.write(f'cd {analysis_dir}\n')
 	output_file.write(line)
 	print(sample)
