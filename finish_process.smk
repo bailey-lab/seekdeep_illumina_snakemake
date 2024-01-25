@@ -104,7 +104,8 @@ rule combine_stats:
 		sif_file=config['sif_file_location']
 	params:
 		output_dir=config['output_folder'],
-		command='combineExtractionCountsCmd.sh'
+		command='/home/analysis/combineExtractionCountsCmd.sh'
+		junk_file=temp('junk_file.txt')
 	output:
 		extraction_profile=config['output_folder']+'/analysis/reports/allExtractionProfile.tab.txt',
 		failed_primers=config['output_folder']+'/analysis/reports/combinedAllFailedPrimerCounts.tab.txt',
@@ -112,6 +113,8 @@ rule combine_stats:
 		process_pairs=config['output_folder']+'/analysis/reports/allProcessPairsCounts.tab.txt'
 	shell:
 		'''
+		echo "cd /home/analysis" >{params.junk_file}
+		cat {params.junk_file} {params.command} >{params.command} 
 		singularity exec -B {params.output_dir}:/seekdeep_output \
 		-B {params.output_dir}/analysis/:/home/analysis \
 		{input.sif_file} bash {params.command}
