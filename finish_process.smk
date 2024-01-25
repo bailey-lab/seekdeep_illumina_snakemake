@@ -104,7 +104,7 @@ rule combine_stats:
 		sif_file=config['sif_file_location']
 	params:
 		output_dir=config['output_folder'],
-		command='/home/analysis/combineExtractionCountsCmd.sh'
+		command='/home/analysis/combineExtractionCountsCmd.sh',
 		junk_file=temp('junk_file.txt')
 	output:
 		extraction_profile=config['output_folder']+'/analysis/reports/allExtractionProfile.tab.txt',
