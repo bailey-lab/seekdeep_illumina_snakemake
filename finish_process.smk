@@ -104,8 +104,10 @@ rule combine_stats:
 		sif_file=config['sif_file_location']
 	params:
 		output_dir=config['output_folder'],
-		command=config['output_folder']+'/combineExtractionCountsCmd.sh',
-		junk_file=temp('junk_file.txt')
+		actual_command=config['output_folder']+'/analysis/combineExtractionCountsCmd.sh',
+		singularity_command='/home/analysis/combineExtractionCountsCmd.sh',
+		junk_file=temp('junk_file.txt'),
+		junk_file2=temp('junk_file2.txt')
 	output:
 		extraction_profile=config['output_folder']+'/analysis/reports/allExtractionProfile.tab.txt',
 		failed_primers=config['output_folder']+'/analysis/reports/combinedAllFailedPrimerCounts.tab.txt',
@@ -113,13 +115,14 @@ rule combine_stats:
 		process_pairs=config['output_folder']+'/analysis/reports/allProcessPairsCounts.tab.txt'
 	shell:
 		'''
+		echo "cd /home/analysis" >{params.junk_file}
+		cat {params.actual_command} >{params.junk_file2}
+		cat {params.junk_file} {params.junk_file2} >{params.actual_command} 
 		singularity exec -B {params.output_dir}:/seekdeep_output \
 		-B {params.output_dir}/analysis/:/home/analysis \
-		{input.sif_file} bash {params.command}
+		{input.sif_file} bash {params.singularity_command}
 		'''
 
-#		echo "cd /home/analysis" >{params.junk_file}
-#		cat {params.junk_file} {params.command} >{params.command} 
 
 
 #gen_config_commands=[line.strip() for line in open(config['output_folder']+'/analysis/genConfigCmds.txt')]
