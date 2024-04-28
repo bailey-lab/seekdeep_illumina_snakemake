@@ -1,8 +1,8 @@
 #information about your system
 sif_file_location: /nfs/jbailey5/baileyweb/bailey_share/bin/elucidator230407.sif #location of downloaded sif file
-output_folder: /nfs/jbailey5/baileyweb/asimkin/seekdeep/DR_amplicon_panel/zambia_12-9-23/seekdeep_results_new_pipeline_v3 #this is where output will go
+output_folder: seekdeep_output #this is where output will go
 read_length: 151 #length (in nt) of each illumina read. Needs to be accurate.
-cpus_to_use: 18 #higher CPU count speeds up runtime, uses more memory
+cpus_to_use: 8 #higher CPU count speeds up runtime, uses more memory
 max_run_time_min: 5760 #maximum amount of time you think this job will take
 max_memory_mb: 30000 #maximum amount of memory you think this job will need
 
@@ -10,15 +10,15 @@ max_memory_mb: 30000 #maximum amount of memory you think this job will need
 
 #this folder should have 3 things: a subfolder of demultiplexed fastq files, a
 #tab delimited file of primers, and a tab delimited file of sample names.
-primer_plus_fastq_binding: /nfs/jbailey5/baileyweb/asimkin/seekdeep/DR_amplicon_panel/zambia_12-9-23
+primer_plus_fastq_binding: /nfs/jbailey5/baileyweb/asimkin/other_people/jmsadler/bigv10ctrl/analyzed_by_PCR_replicates/input_files
 fastq_subfolder: fastq #name of the demultiplexed fastq folder
 primer_file: primers.txt #name of the primer file
 sample_names: sampleNames.tab.txt
 #If the folder of fastq files consists of soft links to fastq files, the path to
 #the original fastq files should be 'bound' in the singularity image. Syntax is:
-#-B original/fastq/location:original/fastq/location
-#(otherwise set this variable as empty quotes '')
-softlink_fastq_binding: '-B /nfs/jbailey5/baileyweb/bailey_share/raw_data/from_others/231201_UNC52-VH01297_99_AACYWMNM5'
+#-B original/fastq/location
+#If no soft links are involved, set this variable as empty quotes ''
+softlink_fastq_binding: '-B /nfs/jbailey5/baileyweb/bailey_share/raw_data/from_others/pfsmarrtv10ctrl'
 
 #the genome_binding folder should have 2 things: a subfolder of bowtie2 indexed
 #genomes, and a subfolder of gff gene annotations for each genome. Optionally, a
@@ -34,10 +34,23 @@ extra_gen_target_info_cmds: ''
 extra_setup_tar_amp_cmds: '--defaultOverlapStatus ALL'
 extra_extractor_cmds: '--extraExtractorCmds="--checkRevComplementForPrimers"'
 extra_qluster_cmds: ''
-extra_process_cluster_cmds: '--extraProcessClusterCmds="--replicateMinTotalReadCutOff 25
-  --sampleMinTotalReadCutOff 25
+
+#replicateMinTotalReadCutoff, lowFreqHaplotypeFracCutOff, and
+#sampleMinTotalReadCutOff are set at their default values, but displayed here to
+#make sure users are aware of these values. runsRequired default value is 0, but
+#we've set this to 2 in this example because we want to filter out haplotypes
+#that are not seen in both replicates of any given sample. For most malaria drug
+#resistance panels, we also collapse homopolymer variation mutations with
+#--allowHomopolymerCollapse. --fracCutOff defaults to 0.005 but we've increased
+#it to 0.02
+extra_process_cluster_cmds: '--extraProcessClusterCmds="--replicateMinTotalReadCutOff 250
+  --fracCutOff 0.02
+  --lowFreqHaplotypeFracCutOff 0.01
+  --sampleMinTotalReadCutOff 250
   --gffFnp /genome_info/info/gff/Pf3D7.gff
   --genomeFnp /genome_info/genomes/Pf3D7.fasta
+  --runsRequired 2
+  --allowHomopolymerCollapse
   --knownAminoAcidChangesFnp /genome_info/info/pf_drug_resistant_aaPositions_k13_updated.tsv"'
 
 samples:
