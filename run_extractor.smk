@@ -5,7 +5,7 @@ sample_names=config['primer_plus_fastq_binding']+'/'+config['sample_names']
 all_lines=[line.strip().split('\t') for line in open(sample_names)]
 all_reps=[]
 for line in all_lines[1:]:
-	all_reps.extend(line[2:]
+	all_reps.extend(line[2:])
 all_reps=sorted(list(set(all_reps)))
 	
 rule all:
