@@ -1,5 +1,13 @@
 configfile: 'seekdeep_illumina_general.yaml'
 
+
+sample_names=config['primer_plus_fastq_binding']+'/'+config['sample_names']
+all_lines=[line.strip().split('\t') for line in open(sample_names)]
+all_reps=[]
+for line in all_lines[1:]:
+	all_reps.extend(line[2:]
+all_reps=sorted(list(set(all_reps)))
+	
 rule all:
 	input:
 #		profile=expand(config['output_folder']+'/analysis/{sample}_extraction/extractionProfile.tab.txt', sample=config['samples'])
@@ -12,7 +20,7 @@ rule prep_extractor:
 		output_folder=config['output_folder']+'/extractor_shell_commands',
 		analysis_dir='/home/analysis'
 	output:
-		all_sample_commands=expand(config['output_folder']+'/extractor_shell_commands/{sample}_extraction_command.sh', sample=config['samples'])
+		all_sample_commands=expand(config['output_folder']+'/extractor_shell_commands/{sample}_extraction_command.sh', sample=all_reps)
 	script:
 		'scripts/prep_extractor.py'
 
@@ -46,8 +54,8 @@ rule run_extractor:
 
 rule analyze_extractor:
 	input:
-		profiles=expand(config['output_folder']+'/analysis/{sample}_extraction/extractionProfile.tab.txt', sample=config['samples']),
-		folders=expand(config['output_folder']+'/analysis/{sample}_extraction', sample=config['samples'])
+		profiles=expand(config['output_folder']+'/analysis/{sample}_extraction/extractionProfile.tab.txt', sample=all_reps),
+		folders=expand(config['output_folder']+'/analysis/{sample}_extraction', sample=all_reps)
 	output:
 		runnable_samples=config['output_folder']+'/non-empty_extractions.txt'
 	script:
