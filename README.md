@@ -4,11 +4,10 @@ a basic workflow for running Nick Hathaway's seekdeep on illumina. This version 
 ## Installation:
  - Install mamba: https://github.com/conda-forge/miniforge#install (don't forget
 to do conda init and follow the instructions to log out and back in at the end)
- - Create a mamba environment and install snakemake and singularity there:
+ - Create a mamba environment and install snakemake there:
 ```bash
 mamba create -c conda-forge -c bioconda -n snakemake snakemake
 mamba activate snakemake
-mamba install -c conda-forge singularity
 ```
 
 ### Setup your environment:
