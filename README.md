@@ -23,19 +23,13 @@ notepad++, gedit, micro, emacs, vim, vi, etc.)
 ```bash
 mamba activate snakemake
 ```
- - If on a slurm system, edit the slurm/config.yaml file to match sbatch job
-submission instructions of your system, or if not on a slurm system, edit the
-non_slurm/config.yaml file. (If you already have a slurm or non_slurm profile
-saved in ~/.config/snakemake/slurm, you can delete the slurm or non_slurm
-folder)
- - Run all steps with (e.g. if using a slurm profile):
+ - Run all steps with (e.g. if you have 8 cores available on your machine):
 ```bash
-snakemake -s setup_run.smk --profile slurm
-snakemake -s run_extractor.smk --profile slurm
-snakemake -s finish_process.smk --profile slurm
+snakemake -s setup_run.smk --cores 8
+snakemake -s run_extractor.smk --cores 8
+snakemake -s finish_process.smk --cores 8
 ```
- - You can also run all steps (editing the file with an appropriate --profile
-name) with:
+ - You can also run all steps with:
 ```bash
 bash run_all_steps.sh
 ```
@@ -59,7 +53,6 @@ Here are some example help commands to learn more about these commands:
   - singularity exec elucidator.sif SeekDeep -h
   - singularity exec elucidator.sif SeekDeep genTargetInfoFromGenomes -h
   - singularity exec elucidator.sif SeekDeep setupTarAmpAnalysis -h
-
 
 ### three sub-steps of running seekdeep.
 Each of these steps can be tweaked for sensitivity and specificity (via extra_
