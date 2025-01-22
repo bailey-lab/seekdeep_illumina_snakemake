@@ -1,3 +1,3 @@
-snakemake -s setup_run.smk --profile slurm
-snakemake -s run_extractor.smk --profile slurm
-snakemake -s finish_process.smk --profile slurm
+snakemake -s setup_run.smk --cores 8
+snakemake -s run_extractor.smk --cores 8
+snakemake -s finish_process.smk --cores 8
