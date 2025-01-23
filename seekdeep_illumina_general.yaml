@@ -1,5 +1,5 @@
 #information about your system
-sif_file_location: /nfs/jbailey5/baileyweb/bailey_share/bin/elucidator230407.sif #location of downloaded sif file
+sif_file_location: elucidator.sif #location of downloaded sif file
 output_folder: seekdeep_output #this is where output will go
 read_length: 151 #length (in nt) of each illumina read. Needs to be accurate.
 cpus_to_use: 8 #higher CPU count speeds up runtime, uses more memory
@@ -10,7 +10,7 @@ max_memory_mb: 30000 #maximum amount of memory you think this job will need
 
 #this folder should have 3 things: a subfolder of demultiplexed fastq files, a
 #tab delimited file of primers, and a tab delimited file of sample names.
-primer_plus_fastq_binding: /nfs/jbailey5/baileyweb/asimkin/other_people/jmsadler/bigv10ctrl/analyzed_by_PCR_replicates/input_files
+primer_plus_fastq_binding: pfsmarrt_input_files
 fastq_subfolder: fastq #name of the demultiplexed fastq folder
 primer_file: primers.txt #name of the primer file
 sample_names: sampleNames.tab.txt
@@ -18,19 +18,19 @@ sample_names: sampleNames.tab.txt
 #the original fastq files should be 'bound' in the singularity image. Syntax is:
 #-B original/fastq/location
 #If no soft links are involved, set this variable as empty quotes ''
-softlink_fastq_binding: '-B /nfs/jbailey5/baileyweb/bailey_share/raw_data/from_others/pfsmarrtv10ctrl'
+softlink_fastq_binding: ''
 
 #the genome_binding folder should have 2 things: a subfolder of bowtie2 indexed
 #genomes, and a subfolder of gff gene annotations for each genome. Optionally, a
 #third item can be added to this folder, which is a file of amino acid positions
 #to annotate. (specified in extra_process_cluster_cmds)
-genome_binding: /nfs/jbailey5/baileyweb/bailey_share/resources/from_others/KevinW_resources/pFalciparum
+genome_binding: pf
 genome_subfolder: genomes #subfolder with bowtie2 indexed genomes
 gff_subfolder: info/gff #subfolder of gff files
 
 #these are seekdeep sensitivity and specificity settings that you can tweak if
 #seekdeep is failing to extract reads or generating inaccurate haplotypes
-extra_gen_target_info_cmds: ''
+extra_gen_target_info_cmds: '--maxLenCutOffSizeExpand 0 --minLenCutOffSizeExpand 0'
 extra_setup_tar_amp_cmds: '--defaultOverlapStatus ALL'
 extra_extractor_cmds: '--extraExtractorCmds="--checkRevComplementForPrimers"'
 extra_qluster_cmds: ''
