@@ -2,6 +2,12 @@
 a basic workflow for running Nick Hathaway's seekdeep on illumina. This version splits up jobs into individual snakemake submissions.
 
 ## Installation:
+ - Install singularity: (my personal favorite installation method on Ubuntu is
+ to download a .deb file from https://github.com/sylabs/singularity/releases)
+ and use
+```bash
+sudo apt install /full/path/to/deb/file)
+```
  - Install mamba: https://github.com/conda-forge/miniforge#install (don't forget
 to do conda init and follow the instructions to log out and back in at the end)
  - Create a mamba environment and install snakemake there:
@@ -12,8 +18,15 @@ mamba activate snakemake
 
 ### Setup your environment:
  - Change directory to a folder where you want to run the analysis
- - clone this repository with git clone web_address - you can get the web_address from the green 'code' button
- - Download the sif file from here into the same folder: https://seekdeep.brown.edu/programs/elucidator.sif
+ - clone this repository with:
+```bash
+git clone https://github.com/bailey-lab/seekdeep_illumina_snakemake.git
+```
+ - change directory to the cloned repo (seekdeep_illumina_snakemake)
+ - download the elucidator.sif file and the tutorial dataset with:
+```bash
+bash download_example_dataset.sh
+```
 
 ## Usage:
  - Edit the seekdeep_illumina_general.yaml file using the instructions in the
